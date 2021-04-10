@@ -16,30 +16,36 @@ app.get("/", function (req, res) {
 app.post("/generate", function (req, res) {
   var f = req.files.f;
   f.mv(__dirname + "/tmp/" + f.name, function () {});
-  console.log(__dirname);
-
+  var cs = [];
   fs.createReadStream("./tmp/" + f.name)
     .pipe(csv())
     .on("data", (row) => {
-      console.log(row.fname + " " + row.lname);
+      var v = row.fname + " " + row.lname;
+      abc(v);
+      // console.log(cs);
     }); // identifying name
-
-  jimp.read("./Data/0001.jpg", (err, c) => {
-    if (err) throw err;
-    jimp
-      // .loadFont(jimp.FONT_SANS_128_BLACK)
-      .loadFont("./Data/Montserrat-BoldItalic.ttf")
-      .then((font) => {
-        console.log("Inside");
-        c.print(font, 10, 10, {
-          text: "Hello AB",
-        }).write("abc.jpg", () => {
-          console.log("Doneeee");
+  function abc(name) {
+    jimp.read("./Data/0001.jpg", (err, c) => {
+      if (err) throw err;
+      jimp
+        .loadFont(jimp.FONT_SANS_128_BLACK)
+        .then((font) => {
+          console.log("Inside");
+          c.print(font, 1320, 950, {
+            text: name,
+            alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
+            alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE,
+          });
+          c.write(name + ".jpg", () => {
+            console.log("Doneeee");
+          });
+        })
+        .catch((err) => {
+          console.log("It's Okay");
         });
-      })
-      .catch((err) => {
-        console.log("It's Okay");
-      });
-  });
+    });
+  }
+  res.send("Done");
 });
+
 app.listen(3000);
