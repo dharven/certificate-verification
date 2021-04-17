@@ -21,20 +21,25 @@ app.post("/generate", function (req, res) {
     .pipe(csv())
     .on("data", (row) => {
       var v = row.fname + " " + row.lname;
-      abc(v);
+      makeCertificate(v);
       // console.log(cs);
     }); // identifying name
-  function abc(name) {
+  function makeCertificate(name) {
     jimp.read("./Data/0001.jpg", (err, c) => {
       if (err) throw err;
+      jimp.loadFont(jimp.FONT_SANS_128_BLACK).then((font) => {
+        console.log("Inside");
+        c.print(font, 1270, 880, {
+          text: name,
+          // alignmentX: jimp.HORIZONTAL_ALIGN_CENTER,
+          // alignmentY: jimp.VERTICAL_ALIGN_MIDDLE,
+        });
+      });
       jimp
-        .loadFont(jimp.FONT_SANS_128_BLACK)
+        .loadFont(jimp.FONT_SANS_32_BLACK)
         .then((font) => {
-          console.log("Inside");
-          c.print(font, 1320, 950, {
-            text: name,
-            alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
-            alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE,
+          c.print(font, 10, 10, {
+            text: "bhargav",
           });
           c.write(name + ".jpg", () => {
             console.log("Doneeee");
@@ -45,6 +50,8 @@ app.post("/generate", function (req, res) {
         });
     });
   }
+
+  function generateCertificateNumber() {}
   res.send("Done");
 });
 
