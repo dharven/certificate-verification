@@ -38,8 +38,8 @@ app.post("/generate", function (req, res) {
       jimp
         .loadFont(jimp.FONT_SANS_32_BLACK)
         .then((font) => {
-          c.print(font, 10, 10, {
-            text: "bhargav",
+          c.print(font, 70, 2000, {
+            text: generateCertificateNumber(),
           });
           c.write(name + ".jpg", () => {
             console.log("Doneeee");
@@ -51,7 +51,17 @@ app.post("/generate", function (req, res) {
     });
   }
 
-  function generateCertificateNumber() {}
+  function generateCertificateNumber() {
+    var p = Math.random().toString(36).slice(2);
+    var q = Math.random().toString(36).slice(2);
+    var r = Math.random().toString(36).slice(2);
+    // var s = Math.random().toString(36).slice(2);
+    var arr = [p, q, r];
+
+    var final = arr.join("-");
+
+    return "Certificate Number: " + final;
+  }
   res.send("Done");
 });
 
